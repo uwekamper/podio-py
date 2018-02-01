@@ -60,7 +60,7 @@ def _strify(s):
     otherwise return str(s), or None if s is None"""
     if s is None:
         return None
-    if isinstance(value, six.string_types):
+    if isinstance(s, six.string_types):
         return s.encode("utf-8")
     return str(s)
 
