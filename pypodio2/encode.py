@@ -8,6 +8,8 @@ multipart/form-data is the standard way to upload files over HTTP"""
 import mimetypes
 import os
 import re
+import six
+
 try:
     from urllib.parse import quote_plus
 except ImportError:
@@ -48,7 +50,7 @@ def encode_and_quote(data):
     if data is None:
         return None
 
-    if isinstance(data, unicode):
+    if isinstance(data, six.string_types):
         data = data.encode("utf-8")
     return quote_plus(data)
 
@@ -58,7 +60,7 @@ def _strify(s):
     otherwise return str(s), or None if s is None"""
     if s is None:
         return None
-    if isinstance(s, unicode):
+    if isinstance(value, six.string_types):
         return s.encode("utf-8")
     return str(s)
 
@@ -103,7 +105,7 @@ class MultipartParam(object):
         if filename is None:
             self.filename = None
         else:
-            if isinstance(filename, unicode):
+            if isinstance(filename, six.string_types):
                 # Encode with XML entities
                 self.filename = filename.encode("ascii", "xmlcharrefreplace")
             else:
