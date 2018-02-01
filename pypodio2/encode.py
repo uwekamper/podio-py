@@ -8,7 +8,11 @@ multipart/form-data is the standard way to upload files over HTTP"""
 import mimetypes
 import os
 import re
-import urllib
+try:
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus
+    
 from email.header import Header
 
 __all__ = ['gen_boundary', 'encode_and_quote', 'MultipartParam',
@@ -39,14 +43,14 @@ except ImportError:
 
 
 def encode_and_quote(data):
-    """If ``data`` is unicode, return urllib.quote_plus(data.encode("utf-8"))
-    otherwise return urllib.quote_plus(data)"""
+    """If ``data`` is unicode, return urllib.parse.quote_plus(data.encode("utf-8"))
+    otherwise return urllib.parse.quote_plus(data)"""
     if data is None:
         return None
 
     if isinstance(data, unicode):
         data = data.encode("utf-8")
-    return urllib.quote_plus(data)
+    return quote_plus(data)
 
 
 def _strify(s):
@@ -323,7 +327,7 @@ def get_headers(params, boundary):
     """Returns a dictionary with Content-Type and Content-Length headers
     for the multipart/form-data encoding of ``params``."""
     headers = {}
-    boundary = urllib.quote_plus(boundary)
+    boundary = quote_plus(boundary)
     headers['Content-Type'] = "multipart/form-data; boundary=%s" % boundary
     headers['Content-Length'] = str(get_body_size(params, boundary))
     return headers
@@ -425,7 +429,7 @@ def multipart_encode(params, boundary=None, cb=None):
     if boundary is None:
         boundary = gen_boundary()
     else:
-        boundary = urllib.quote_plus(boundary)
+        boundary = quote_plus(boundary)
 
     headers = get_headers(params, boundary)
     params = MultipartParam.from_params(params)
