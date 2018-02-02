@@ -350,7 +350,7 @@ class MultipartYielder:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         """generator function to yield multipart/form-data representation
         of parameters"""
         if self.param_iter is not None:
@@ -380,6 +380,8 @@ class MultipartYielder:
         self.param_iter = self.p.iter_encode(self.boundary)
         self.i += 1
         return self.next()
+        
+    next = __next__
 
     def reset(self):
         self.i = 0
