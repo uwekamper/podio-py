@@ -517,7 +517,7 @@ class Files(Area):
             'ref_id': ref_id
         }
         return self.transport.POST(
-            url='/file/%s/attach%s' % (file_id, self.get_options(silent=silent, hook=hook))
+            url='/file/%s/attach%s' % (file_id, self.get_options(silent=silent, hook=hook)),
             body=json.dumps(attributes),
             type='application/json'
         )
